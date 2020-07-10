@@ -1,11 +1,21 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import LanguageSelection from './Components/LanguageSelection';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch
+} from 'react-router-dom';
+import Routes from './routes';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
+    <Router>
+      <div className="App">
+        {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -18,8 +28,9 @@ function App() {
         >
           Learn React
         </a>
-      </header>
-    </div>
+      </header> */}
+        <Routes></Routes>
+      </div></Router>
   );
 }
 
