@@ -8,8 +8,6 @@ import addLocale, { ADD_SELECTED_LANGUAGE } from "../redux/action";
 import LoginForm from "../Login/LoginForm";
 import history from "../history";
 
-// const navigateTo = () => history.push('/componentURL');
-
 
 class LanguageSelectionForm extends React.Component {
 
@@ -23,15 +21,14 @@ class LanguageSelectionForm extends React.Component {
         this.props.addLocale(value);
     }
 
- 
+
     render() {
-        const { items = {} } = this.props;
         return (
+
             <Card>
                 <CardContent>
-
                     <Row>
-                        {items.map(list =>
+                        {this.props.languages.map(list =>
                             <Col key={list.value}>
                                 <Button color="secondary"
                                     variant={this.props.locale === list.value ? 'contained' : 'outlined'}
@@ -41,9 +38,9 @@ class LanguageSelectionForm extends React.Component {
                     </Row>
                     <Row className="mt-5">
                         <Col>
-                            <Button variant="contained" 
-                            color="secondary"
-                            onClick={() => history.push('/login')}  >Continue</Button>
+                            <Button variant="contained"
+                                color="secondary"
+                                onClick={() => history.push('/login')}  >Continue</Button>
                         </Col>
                     </Row>
                 </CardContent>
@@ -53,12 +50,14 @@ class LanguageSelectionForm extends React.Component {
 
 }
 
-
 const MapStateToProps = (state) => {
+    console.log(state);
     return {
-        locale: state.locale
+        locale: state.locale,
+        languages: state.languages
     };
 };
+
 const MapDispatchToProps = (dispatch) => {
     return {
         addLocale: (payload) => dispatch(addLocale(payload))

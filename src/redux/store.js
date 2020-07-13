@@ -1,14 +1,19 @@
-const { combineReducers, createStore } = require("redux");
-const { default: localeReducer } = require("./reducer");
+import thunkMiddleware from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
+const { combineReducers, createStore, applyMiddleware, compose } = require("redux");
+const { default: localeReducer, languageReducer } = require("./reducer");
 
-const reducers = combineReducers({ locale: localeReducer });
+const reducers = combineReducers({
+    locale: localeReducer,
+    languages: languageReducer
+});
 
 const initialState = {
-    locale: localStorage.getItem('selected_locale') ? localStorage.getItem('selected_locale') : 'en_IN'
+    locale: localStorage.getItem('selected_locale') ? localStorage.getItem('selected_locale') : 'en_IN',
+    languages: []
 };
 
 const store = createStore(reducers,
-    initialState, window.__REDUX_DEVTOOLS_EXTENSION__ &&
-window.__REDUX_DEVTOOLS_EXTENSION__());
+    initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)));
 
 export default store;

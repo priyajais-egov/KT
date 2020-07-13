@@ -1,58 +1,69 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import axios from 'axios';
 import LanguageSelectionForm from "./LanguageSelectionForm";
+import { connect } from "react-redux";
+import { fetchLanguage, addLanguage } from "../redux/action";
+
+const http = axios.create({
+  baseURL: window.location.origin
+});
+
+export const MDMS = () => {
+  const req = {
+    RequestInfo: {
+      "apiId": "Rainmaker",
+      "ver": ".01",
+      "ts": "",
+      "action": "_search",
+      "did": "1",
+      "key": "",
+      "msgId": "20170310130900|en_IN",
+      "authToken": null
+    },
+    MdmsCriteria: {
+      tenantId: "pb",
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "StateInfo"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  return http.post('egov-mdms-service/v1/_search?tenantId=pb', req, {
+    proxy: {
+      host: 'https://egov-micro-dev.egovernments.org'
+    }
+  });
+};
 
 class LanguageSelection extends Component {
-    state = {
-        items: [
-          {
-            label: "ENGLISH",
-            value: "en_IN",
-          },
-          {
-            label: "हिंदी",
-            value: "hi_IN",
-          },
-          {
-            label: "ਪੰਜਾਬੀ",
-            value: "pn_IN",
-          },
-        ],
-      };
-  
-//   onClick = (value) => {
-//     this.setState({ value });
-//     this.props.fetchLocalizationLabel(value);
-//   };
+  state = {
+    languages: []
+  };
 
-//   onLanguageSelect = () => {
-//     this.props.history.push("/user/register");
-//   };
+  componentDidMount = () => {
+    this.props.fetchLanguage();
+  }
+
 
   render() {
-    const { items = [] } = this.state;
+    const { languages = [] } = this.state;
     return (
-        <LanguageSelectionForm items={items} />
-        
+      <LanguageSelectionForm />
+
     );
   }
 }
 
-// const mapStateToProps = ({ common }) => {
-//   const { stateInfoById } = common;
-//   let languages = get(stateInfoById, "0.languages", []);
-//   return { languages };
-// };
+const MapDispatchToProps = (dispatch) => {
+  return {
+    fetchLanguage: () => dispatch(fetchLanguage())
+  }
+}
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     fetchLocalizationLabel: (locale) => dispatch(fetchLocalizationLabel(locale)),
-//   };
-// };
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(LanguageSelection);
-
-export default LanguageSelection;
+export default connect(null, MapDispatchToProps)(LanguageSelection);
